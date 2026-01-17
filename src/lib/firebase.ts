@@ -1,15 +1,14 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
-// Environment variables are the best practice for Firebase keys
-// You can set these in Netlify settings or a .env file locally
+// Hardcoded configuration to ensure reliability across hosting platforms
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.VITE_FIREBASE_APP_ID
+    apiKey: "AIzaSyCycMupVBpkDDegGsc7h56P25B4oArWPR4",
+    authDomain: "school-management-977e9.firebaseapp.com",
+    projectId: "school-management-977e9",
+    storageBucket: "school-management-977e9.firebasestorage.app",
+    messagingSenderId: "543603942722",
+    appId: "1:543603942722:web:16b9e6f282f083b08c94db"
 };
 
 // Diagnostic logging for the user (only in dev or if keys missing)
