@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #6B46C1;
+  --color-secondary: #1F2937;
+}
+
+@keyframes progress {
+  from {
+    scale: 1 1;
+  }
+
+  to {
+    scale: 0 1;
+  }
+}
+
+.animate-progress {
+  animation: progress 3000ms linear forwards;
+}
+
+/* Custom Base Styles */
+@layer base {
+  body {
+    @apply bg-gray-100 text-gray-900;
+  }
+}
