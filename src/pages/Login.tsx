@@ -141,13 +141,13 @@ export default function Login() {
             </div>
 
             {/* Subtile Debug Info for deployment troubleshooting */}
-            <div className="fixed bottom-2 right-2 opacity-20 hover:opacity-100 transition-opacity flex flex-col items-end gap-1">
-                <div className="bg-black text-[10px] text-white p-3 rounded-lg font-mono shadow-2xl">
-                    <p className="font-bold border-b border-white/20 mb-2 pb-1 text-purple-400">Auth Debug (Compare with Firebase):</p>
-                    <p>API_KEY: {import.meta.env.VITE_FIREBASE_API_KEY ? `${import.meta.env.VITE_FIREBASE_API_KEY.slice(0, 6)}...${import.meta.env.VITE_FIREBASE_API_KEY.slice(-4)} ✅` : 'MISSING ❌'}</p>
-                    <p>PROJECT_ID: {import.meta.env.VITE_FIREBASE_PROJECT_ID ? `${import.meta.env.VITE_FIREBASE_PROJECT_ID} ✅` : 'MISSING ❌'}</p>
-                    <p className="mt-2 text-gray-500 border-t border-white/10 pt-1">Build: {new Date().toLocaleTimeString()}</p>
-                    <p className="text-[8px] text-gray-600 mt-1 italic">Note: Check for spaces/quotes in Netlify.</p>
+            <div className="fixed bottom-2 right-2 opacity-80 hover:opacity-100 transition-opacity flex flex-col items-end gap-1">
+                <div className="bg-red-600 text-[10px] text-white p-3 rounded-lg font-mono shadow-2xl border-2 border-white">
+                    <p className="font-bold border-b border-white/40 mb-2 pb-1">DIAGNOSTIC VERSION (HARDCODED)</p>
+                    <p>API_KEY: AIzaSy...WPR4 ✅</p>
+                    <p>PROJECT_ID: school-management-977e9 ✅</p>
+                    <p className="mt-2 text-red-100 border-t border-white/20 pt-1">Build: {new Date().toLocaleTimeString()}</p>
+                    <p className="text-[8px] text-white/70 mt-1 italic">If you see RED, this is the HARDCODED version.</p>
                 </div>
             </div>
         </div>
