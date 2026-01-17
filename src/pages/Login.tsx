@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogIn, Lock, ArrowRight, AlertCircle, User } from 'lucide-react';
-import { security } from '../lib/security';
-import { useAuth } from '../context/AuthContext';
+import { LogIn, Lock, ArrowRight, AlertCircle, Mail } from 'lucide-react';
+import { auth, googleProvider } from '../lib/firebase';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 
 export default function Login() {
     const navigate = useNavigate();
-    const { login } = useAuth();
 
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -19,24 +18,24 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const creds = await security.getAdminCredentials();
-            if (!creds) {
-                // If somehow we're here without creds, redirect to register
-                navigate('/register');
-                return;
-            }
+            await signInWithEmailAndPassword(auth, email, password);
+            navigate('/');
+        } catch (err: any) {
+            setError(err.message || 'Login failed');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-            const validUser = await security.verify(username, creds.usernameHash);
-            const validPass = await security.verify(password, creds.passwordHash);
-
-            if (validUser && validPass) {
-                login();
-                navigate('/');
-            } else {
-                setError('Invalid username or password');
-            }
-        } catch (err) {
-            setError('Login failed');
+    const handleGoogleLogin = async () => {
+        setError('');
+        setLoading(true);
+        try {
+            await signInWithPopup(auth, googleProvider);
+            navigate('/');
+        } catch (err: any) {
+            setError(err.message || 'Google login failed');
             console.error(err);
         } finally {
             setLoading(false);
@@ -60,16 +59,16 @@ export default function Login() {
                     <form onSubmit={handleLogin} className="space-y-5">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Username
+                                Email Address
                             </label>
                             <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                                 <input
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
-                                    placeholder="Enter username"
+                                    placeholder="Enter your email"
                                     required
                                 />
                             </div>
@@ -113,6 +112,31 @@ export default function Login() {
                             {!loading && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}
                         </button>
                     </form>
+
+                    <div className="relative my-8">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-200"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-white text-gray-500 tracking-wider uppercase text-xs font-semibold">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={handleGoogleLogin}
+                        disabled={loading}
+                        className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all font-medium text-gray-700 disabled:opacity-50"
+                    >
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
+                        Google
+                    </button>
+
+                    <p className="mt-8 text-center text-sm text-gray-600">
+                        Don't have an account?{' '}
+                        <Link to="/register" className="text-purple-600 hover:text-purple-700 font-bold">
+                            Sign up now
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

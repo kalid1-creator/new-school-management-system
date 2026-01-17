@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { UserPlus, Lock, ArrowRight, AlertCircle, User } from 'lucide-react';
-import { security } from '../lib/security';
-import { useAuth } from '../context/AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
+import { UserPlus, Lock, ArrowRight, AlertCircle, Mail } from 'lucide-react';
+import { auth } from '../lib/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export default function Register() {
     const navigate = useNavigate();
-    const { markSetupComplete, login } = useAuth(); // We'll auto-login after register
 
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -31,15 +30,10 @@ export default function Register() {
         setLoading(true);
 
         try {
-            const uHash = await security.hash(username);
-            const pHash = await security.hash(password);
-
-            await security.setAdminCredentials(uHash, pHash);
-            markSetupComplete();
-            login(); // Auto login
+            await createUserWithEmailAndPassword(auth, email, password);
             navigate('/');
-        } catch (err) {
-            setError('Failed to create account');
+        } catch (err: any) {
+            setError(err.message || 'Failed to create account');
             console.error(err);
         } finally {
             setLoading(false);
@@ -63,16 +57,16 @@ export default function Register() {
                     <form onSubmit={handleRegister} className="space-y-5">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Admin Username
+                                Email Address
                             </label>
                             <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                                 <input
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                                    placeholder="admin"
+                                    placeholder="Enter your email"
                                     required
                                 />
                             </div>
@@ -128,6 +122,13 @@ export default function Register() {
                             {!loading && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}
                         </button>
                     </form>
+
+                    <p className="mt-8 text-center text-sm text-gray-600">
+                        Already have an account?{' '}
+                        <Link to="/login" className="text-blue-600 hover:text-blue-700 font-bold">
+                            Sign in
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

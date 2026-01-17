@@ -13,7 +13,6 @@ import TeacherAttendance from './pages/TeacherAttendance';
 import Revenue from './pages/Revenue';
 import Classes from './pages/Classes';
 import Settings from './pages/Settings';
-import Setup from './pages/Setup';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
@@ -21,17 +20,9 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isDeviceTrusted, isSetupComplete, initLoading } = useAuth();
+  const { isAuthenticated, initLoading } = useAuth();
 
   if (initLoading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-
-  if (!isDeviceTrusted) {
-    return <Navigate to="/setup" replace />;
-  }
-
-  if (!isSetupComplete) {
-    return <Navigate to="/register" replace />;
-  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
@@ -46,7 +37,6 @@ function App() {
       <NotificationProvider>
         <HashRouter>
           <Routes>
-            <Route path="/setup" element={<Setup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
