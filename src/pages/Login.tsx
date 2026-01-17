@@ -139,6 +139,16 @@ export default function Login() {
                     </p>
                 </div>
             </div>
+
+            {/* Subtile Debug Info for deployment troubleshooting */}
+            <div className="fixed bottom-2 right-2 opacity-20 hover:opacity-100 transition-opacity flex flex-col items-end gap-1">
+                <div className="bg-black text-[10px] text-white p-2 rounded-lg font-mono">
+                    <p className="font-bold border-b border-white/20 mb-1">Build Info (Auth Debug):</p>
+                    <p>API_KEY: {import.meta.env.VITE_FIREBASE_API_KEY ? 'LOADED ✅' : 'MISSING ❌'}</p>
+                    <p>PROJECT_ID: {import.meta.env.VITE_FIREBASE_PROJECT_ID ? 'LOADED ✅' : 'MISSING ❌'}</p>
+                    <p className="mt-1 text-gray-400">Build: {new Date().toLocaleTimeString()}</p>
+                </div>
+            </div>
         </div>
     );
 }

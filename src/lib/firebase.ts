@@ -24,6 +24,12 @@ if (missingKeys.length > 0) {
     console.log(`✅ Firebase initialized with API Key: ${maskedKey}`);
 }
 
-const app = initializeApp(firebaseConfig);
+let app;
+try {
+    app = initializeApp(firebaseConfig);
+} catch (error) {
+    console.error("❌ Firebase failed to initialize:", error);
+}
+
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
