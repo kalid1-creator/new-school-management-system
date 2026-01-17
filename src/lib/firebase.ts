@@ -12,9 +12,16 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-// Safety check: Don't initialize if API Key is missing
-if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "YOUR_API_KEY") {
-    console.error("Firebase API Key is missing! Check your Environment Variables.");
+// Diagnostic logging for the user (only in dev or if keys missing)
+const missingKeys = Object.entries(firebaseConfig)
+    .filter(([_, value]) => !value || value === "YOUR_API_KEY")
+    .map(([key]) => key);
+
+if (missingKeys.length > 0) {
+    console.warn("⚠️ Firebase Configuration Incomplete! Missing keys:", missingKeys.join(", "));
+} else {
+    const maskedKey = firebaseConfig.apiKey ? `${firebaseConfig.apiKey.substring(0, 5)}...${firebaseConfig.apiKey.slice(-3)}` : 'MISSING';
+    console.log(`✅ Firebase initialized with API Key: ${maskedKey}`);
 }
 
 const app = initializeApp(firebaseConfig);
