@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Hardcoded configuration to ensure reliability across hosting platforms
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: "AIzaSyCycMupVBpkDDegGsc7h56P25B4oArWPR4",
     authDomain: "school-management-977e9.firebaseapp.com",
     projectId: "school-management-977e9",

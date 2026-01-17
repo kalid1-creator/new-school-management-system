@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogIn, Lock, ArrowRight, AlertCircle, Mail } from 'lucide-react';
-import { auth, googleProvider } from '../lib/firebase';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { auth, firebaseConfig } from '../lib/firebase';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 export default function Login() {
     const navigate = useNavigate();
+    const googleProvider = new GoogleAuthProvider();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -141,13 +142,14 @@ export default function Login() {
             </div>
 
             {/* Subtile Debug Info for deployment troubleshooting */}
-            <div className="fixed bottom-2 right-2 opacity-80 hover:opacity-100 transition-opacity flex flex-col items-end gap-1">
-                <div className="bg-red-600 text-[10px] text-white p-3 rounded-lg font-mono shadow-2xl border-2 border-white">
-                    <p className="font-bold border-b border-white/40 mb-2 pb-1">DIAGNOSTIC VERSION (HARDCODED)</p>
-                    <p>API_KEY: AIzaSy...WPR4 ✅</p>
-                    <p>PROJECT_ID: school-management-977e9 ✅</p>
+            <div className="fixed bottom-2 right-2 opacity-80 hover:opacity-100 transition-opacity flex flex-col items-end gap-1"
+                onClick={() => console.log('Current Firebase Config:', firebaseConfig)}>
+                <div className="bg-red-600 text-[10px] text-white p-3 rounded-lg font-mono shadow-2xl border-2 border-white cursor-help">
+                    <p className="font-bold border-b border-white/40 mb-2 pb-1">LIVE DIAGNOSTICS (FROM CODE)</p>
+                    <p>API_KEY: {firebaseConfig.apiKey.slice(0, 6)}...{firebaseConfig.apiKey.slice(-4)} ✅</p>
+                    <p>PROJECT_ID: {firebaseConfig.projectId} ✅</p>
                     <p className="mt-2 text-red-100 border-t border-white/20 pt-1">Build: {new Date().toLocaleTimeString()}</p>
-                    <p className="text-[8px] text-white/70 mt-1 italic">If you see RED, this is the HARDCODED version.</p>
+                    <p className="text-[8px] text-white/70 mt-1 italic">Click this box to see full config in Console.</p>
                 </div>
             </div>
         </div>
